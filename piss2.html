@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JADEISDEAD.EXE</title>
+
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+  }
+
+  .video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    z-index: -1;
+  }
+
+  .title-container {
+    text-align: center;
+    position: absolute;
+    top: 20px; 
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .marquee-container {
+    position: absolute;
+    top: 100px; 
+    width: 100%;
+    text-align: center;
+  }
+
+  .form-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.8); 
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background-color: #880808;
+  }
+
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+   .homepage-button {
+    position: absolute; 
+    top: 500px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  	       .custom-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+        .custom-button img {
+            width: 40px;
+            height: 40px;
+        }
+        .custom-button img:hover {
+            opacity: 0.8;
+        }
+
+</style>
+</head>
+
+<body>
+ 
+  <video autoplay loop muted class="video-background">
+    <source src="https://raw.githubusercontent.com/JADEISDEAD/JADEISDEAD/refs/heads/main/sadboi.mp4" type="video/mp4">
+  </video>
+  
+  <a href="http://jadeisdead.com/" target="_blank" class="custom-button">
+        <img src="https://media.tenor.com/yso9Ncqwm5UAAAAi/click-subscribe.gif" alt="Custom Button">
+    </a>
+
+
+  <div class="title-container">
+    <img src="https://raw.githubusercontent.com/JADEISDEAD/JADEISDEAD/refs/heads/main/JADEISDEAD.png" alt="jadeisdead">
+  </div>
+
+  <div class="marquee-container">
+    <marquee>
+      <h1 style="color:#FFD700; font-size: 72px;">send me a anonymous message.</h1>
+    </marquee>
+  </div>
+
+
+  <div class="form-container">
+    <form id="messageForm">
+      <textarea id="message" placeholder="Enter your anonymous message here..." required></textarea>
+      <br>
+      <button type="submit" id="submitButton">Send Message</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('messageForm').addEventListener('submit', function(event) {
+      event.preventDefault(); 
+
+      const message = document.getElementById('message').value;
+      const submitButton = document.getElementById('submitButton');
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+
+      const webhookURL = 'https://discord.com/api/webhooks/1370899228955639870/ASoYsXfGWmopEb-2TTgVQCnYfQJ7xpoGE0x1zmKg8H3hGBI-0spvAJ6ktgM1p28I7PpO';
+
+      const data = {
+        content: message,
+        username: "Mfs in your shit gang" 
+      };
+
+      fetch(webhookURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Message sent successfully!');
+          document.getElementById('message').value = ''; 
+        } else {
+          alert('Failed to send message. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      })
+      .finally(() => {
+        // Re-enable the submit button
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Message';
+      });
+    });
+  </script>
+</body>
+</html>
