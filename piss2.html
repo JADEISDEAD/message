@@ -60,6 +60,16 @@
     background: rgba(255, 255, 255, 0.8); 
   }
 
+  .char-count {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #000;
+  }
+
+  .char-count.exceeded {
+    color: red;
+  }
+
   button {
     padding: 10px 20px;
     background-color: #000000;
@@ -78,7 +88,8 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
-   .homepage-button {
+
+  .homepage-button {
     position: absolute; 
     top: 500px; 
     left: 50%; 
@@ -87,22 +98,24 @@
     border: none;
     cursor: pointer;
   }
-  	       .custom-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            border: none;
-            background: none;
-            cursor: pointer;
-        }
-        .custom-button img {
-            width: 40px;
-            height: 40px;
-        }
-        .custom-button img:hover {
-            opacity: 0.8;
-        }
 
+  .custom-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .custom-button img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .custom-button img:hover {
+    opacity: 0.8;
+  }
 </style>
 </head>
 
@@ -113,9 +126,8 @@
   </video>
   
   <a href="http://jadeisdead.com/" target="_blank" class="custom-button">
-        <img src="https://media.tenor.com/yso9Ncqwm5UAAAAi/click-subscribe.gif" alt="Custom Button">
-    </a>
-
+    <img src="https://media.tenor.com/yso9Ncqwm5UAAAAi/click-subscribe.gif" alt="Custom Button">
+  </a>
 
   <div class="title-container">
     <img src="https://raw.githubusercontent.com/JADEISDEAD/JADEISDEAD/refs/heads/main/JADEISDEAD.png" alt="jadeisdead">
@@ -127,21 +139,45 @@
     </marquee>
   </div>
 
-
   <div class="form-container">
     <form id="messageForm">
       <textarea id="message" placeholder="Enter your anonymous message here..." required></textarea>
-      <br>
+      <div id="charCount" class="char-count">0 / 100</div>
       <button type="submit" id="submitButton">Send Message</button>
     </form>
   </div>
 
   <script>
+    const messageInput = document.getElementById('message');
+    const charCount = document.getElementById('charCount');
+    const maxChars = 100;
+
+    messageInput.addEventListener('input', () => {
+      const length = messageInput.value.length;
+      charCount.textContent = `${length} / ${maxChars}`;
+      charCount.classList.toggle('exceeded', length > maxChars);
+    });
+
     document.getElementById('messageForm').addEventListener('submit', function(event) {
       event.preventDefault(); 
 
-      const message = document.getElementById('message').value;
+      const message = messageInput.value.trim();
       const submitButton = document.getElementById('submitButton');
+
+      if (message.length > maxChars) {
+        alert('Message must be 100 characters or less.');
+        return;
+      }
+
+      if (/@everyone/i.test(message)) {
+        alert('You cannot mention @everyone.');
+        return;
+      }
+
+      if (/https?:\/\//i.test(message)) {
+        alert('Links are not allowed.');
+        return;
+      }
 
       submitButton.disabled = true;
       submitButton.textContent = 'Sending...';
@@ -150,7 +186,7 @@
 
       const data = {
         content: message,
-        username: "Mfs in your shit gang" 
+        username: "Mfs in your shit gang"
       };
 
       fetch(webhookURL, {
@@ -163,7 +199,8 @@
       .then(response => {
         if (response.ok) {
           alert('Message sent successfully!');
-          document.getElementById('message').value = ''; 
+          messageInput.value = '';
+          charCount.textContent = '0 / 100';
         } else {
           alert('Failed to send message. Please try again.');
         }
@@ -173,7 +210,6 @@
         alert('An error occurred. Please try again.');
       })
       .finally(() => {
-        // Re-enable the submit button
         submitButton.disabled = false;
         submitButton.textContent = 'Send Message';
       });
