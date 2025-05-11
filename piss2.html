@@ -169,15 +169,16 @@
         return;
       }
 
-      if (/@everyone/i.test(message)) {
-        alert('You cannot mention @everyone.');
-        return;
-      }
+     if (/@everyone|@here/i.test(message)) {
+  alert('You cannot mention @everyone or @here.');
+  return;
+}
 
       if (/https?:\/\//i.test(message)) {
         alert('Links are not allowed.');
         return;
       }
+
 
       submitButton.disabled = true;
       submitButton.textContent = 'Sending...';
